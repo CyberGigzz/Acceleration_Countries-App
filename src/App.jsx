@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -55,19 +56,27 @@ const App = () => {
     (country) => country.cca2 === selectedCountry
   );
 
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
+  // const handleCountryChange = (event) => {
+  //   setSelectedCountry(event.target.value);
+  // };
+
+  const options = countries.map((country) => ({
+    value: country.cca2,
+    label: country.name.common,
+  }));
+
+  console.log(options);
+
+  const handleChange = (selectedOption) => {
+    setSelectedCountry(selectedOption.value);
   };
 
-  console.log(selectedCountryDetails);
-
   return (
-    <div className="flex items-center justify-center pt-2">
-      <select
+    <div className="p-6 border-solid border-2 max-w-7xl  w-full m-4">
+      {/* <select
         value={selectedCountry}
         onChange={handleCountryChange}
         className="max-w-xs w-64"
-        style={{ scrollBehavior: 'smooth' }}
       >
         <option value="" disabled hidden>
           Choose a country
@@ -77,7 +86,13 @@ const App = () => {
             {country.name.common}
           </option>
         ))}
-      </select>
+      </select> */}
+      <Select
+        value={options.find((option) => option.value === selectedCountry)}
+        onChange={handleChange}
+        options={options}
+        className="w-full hover:cursor-pointer"
+      />
       {selectedCountryDetails && (
         <div>
           <h2>
@@ -91,7 +106,9 @@ const App = () => {
           <p>Capital: {selectedCountryDetails?.capital}</p>
           <p>Region: {selectedCountryDetails?.region}</p>
           <p>Subregion: {selectedCountryDetails?.subregion}</p>
-          <p>Population: {selectedCountryDetails?.population}</p>
+          <p>
+            Population: {selectedCountryDetails?.population.toLocaleString()}
+          </p>
           <p>
             Borders:{' '}
             {selectedCountryDetails.borders?.map((border) => {
