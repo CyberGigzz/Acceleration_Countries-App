@@ -11,6 +11,8 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [activeLink, setActiveLink] = useState('currency');
   const [userLocation, setUserLocation] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -28,9 +30,11 @@ const App = () => {
       .get('https://restcountries.com/v3.1/all')
       .then((response) => {
         setCountries(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching countries', error);
+        setIsLoading(false);
       });
   }, []);
 
@@ -75,6 +79,7 @@ const App = () => {
         options={options}
         selectedCountry={selectedCountry}
         handleChange={handleChange}
+        isLoading={isLoading}
       />
       <CountryDetails
         selectedCountryDetails={selectedCountryDetails}
