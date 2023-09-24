@@ -108,7 +108,7 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
                 setAmount(value);
               }
             }}
-            className="flex-grow p-2 pl-5 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </div>
 
