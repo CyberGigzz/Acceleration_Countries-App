@@ -1,12 +1,5 @@
-import Select, { components } from 'react-select';
-
+import Select from 'react-select';
 import { BeatLoader } from 'react-spinners';
-
-const DropdownIndicator = (props) => {
-  return props.selectProps.isLoading ? null : (
-    <components.DropdownIndicator {...props} />
-  );
-};
 
 const CountrySelect = ({
   options,
@@ -28,13 +21,16 @@ const CountrySelect = ({
             padding: '13px 6.5px',
             fontSize: '16px',
           }),
+          indicatorsContainer: (provided) => ({
+            ...provided,
+            display: isLoading ? 'none' : 'flex',
+          }),
         }}
         isDisabled={isLoading}
-        components={{ DropdownIndicator }}
       />
       {isLoading && (
         <div className="absolute right-0 top-0 h-full flex items-center pr-2">
-          <BeatLoader size={8} color={'#123abc'} loading={isLoading} />
+          <BeatLoader size={8} color={'#007BFF'} loading={isLoading} />
         </div>
       )}
     </div>

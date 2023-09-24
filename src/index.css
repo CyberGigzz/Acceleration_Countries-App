@@ -14,3 +14,7 @@
   transform: translateY(-50%);
   color: #757575;
 }
+
+.dropdown-toggle::after {
+  display: none !important;
+}
