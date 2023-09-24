@@ -15,6 +15,43 @@
   color: #757575;
 }
 
-.dropdown-toggle::after {
-  display: none !important;
+/* Animation */
+.skeleton-box {
+  width: 100%;
+  height: 20px;
+  border-radius: 0.5rem;
+  margin-bottom: 0.7rem;
+
+  background: linear-gradient(-90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: loading 1.2s ease-in-out infinite;
+}
+
+.skeleton-box:nth-child(2) {
+  width: 90%;
+}
+
+.skeleton-box:nth-child(3) {
+  width: 80%;
+}
+
+.skeleton-box:nth-child(4) {
+  width: 70%;
+}
+
+.skeleton-box:nth-child(5) {
+  width: 60%;
+}
+
+.skeleton-box:nth-child(6) {
+  width: 50%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }

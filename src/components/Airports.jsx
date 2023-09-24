@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const LoadingSkeleton = () => {
+  return (
+    <div className="mt-5 p-5 shadow-lg">
+      <div className="skeleton-box"></div>
+      <div className="skeleton-box"></div>
+      <div className="skeleton-box"></div>
+      <div className="skeleton-box"></div>
+      <div className="skeleton-box"></div>
+      <div className="skeleton-box"></div>
+    </div>
+  );
+};
+
 const Airports = ({ selectedCountryDetails }) => {
   const [search, setSearch] = useState('');
   const [airports, setAirports] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const apiKey = import.meta.env.VITE_AIRPORTS_API_KEY;
 
@@ -18,6 +32,7 @@ const Airports = ({ selectedCountryDetails }) => {
         })
         .then((response) => {
           setAirports(response.data);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error('Error fetching airports', error);
@@ -26,9 +41,14 @@ const Airports = ({ selectedCountryDetails }) => {
             console.log(error.response.status);
             console.log(error.response.headers);
           }
+          setIsLoading(false);
         });
     }
-  }, [selectedCountryDetails]);
+  }, [selectedCountryDetails, apiKey]);
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
 
   const filteredAirports = airports.filter((airport) =>
     airport.name.toLowerCase().includes(search.toLowerCase())
