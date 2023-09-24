@@ -7,33 +7,8 @@ const Airports = ({ selectedCountryDetails }) => {
 
   const apiKey = import.meta.env.VITE_AIRPORTS_API_KEY;
 
-  //   useEffect(() => {
-  //     if (selectedCountryDetails.name) {
-  //       const url = `https://api.api-ninjas.com/v1/airports?name=${selectedCountryDetails.name.common}`;
-  //       axios
-  //         .get(url, {
-  //           headers: {
-  //             'X-Api-Key': apiKey,
-  //           },
-  //         })
-  //         .then((response) => {
-  //           console.log(response.data);
-  //           setAirports(response.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error fetching airports', error);
-  //           if (error.response) {
-  //             console.log(error.response.data);
-  //             console.log(error.response.status);
-  //             console.log(error.response.headers);
-  //           }
-  //         });
-  //     }
-  //   }, [selectedCountryDetails]);
-
   useEffect(() => {
     if (selectedCountryDetails.name) {
-      console.log(selectedCountryDetails);
       const url = `https://api.api-ninjas.com/v1/airports?country=${selectedCountryDetails.cca2}`;
       axios
         .get(url, {
@@ -42,7 +17,6 @@ const Airports = ({ selectedCountryDetails }) => {
           },
         })
         .then((response) => {
-          console.log(response.data);
           setAirports(response.data);
         })
         .catch((error) => {
@@ -56,34 +30,6 @@ const Airports = ({ selectedCountryDetails }) => {
     }
   }, [selectedCountryDetails]);
 
-  //   useEffect(() => {
-  //     if (selectedCountryDetails.name) {
-  //       console.log(selectedCountryDetails.name.common);
-  //       //   const url = `https://api.api-ninjas.com/v1/airports?country=${encodeURIComponent(
-  //       //     selectedCountryDetails.iso2Code
-  //       const url = `https://api.api-ninjas.com/v1/airports?country=${selectedCountryDetails.name.common}
-  //       )}`;
-  //       axios
-  //         .get(url, {
-  //           headers: {
-  //             'X-Api-Key': apiKey,
-  //           },
-  //         })
-  //         .then((response) => {
-  //           console.log(response.data);
-  //           setAirports(response.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error fetching airports', error);
-  //           if (error.response) {
-  //             console.log(error.response.data);
-  //             console.log(error.response.status);
-  //             console.log(error.response.headers);
-  //           }
-  //         });
-  //     }
-  //   }, [selectedCountryDetails]);
-
   const filteredAirports = airports.filter((airport) =>
     airport.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -96,7 +42,7 @@ const Airports = ({ selectedCountryDetails }) => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search airports..."
-        className="mt-5"
+        className="mt-5 p-2 w-full border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
       />
       {airports.length > 0 && (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 mt-5">

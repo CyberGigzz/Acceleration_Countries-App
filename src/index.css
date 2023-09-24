@@ -2,4 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.input-wrapper {
+  position: relative;
+}
 
+.input-wrapper::before {
+  content: attr(data-symbol);
+  position: absolute;
+  left: 5px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #757575;
+}

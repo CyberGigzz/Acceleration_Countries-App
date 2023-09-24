@@ -5,7 +5,7 @@ import axios from 'axios';
 const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
   const [selectedCurrency, setSelectedCurrency] = useState('');
   const [amount, setAmount] = useState(0);
-  const [convertedAmount, setConvertedAmount] = useState(0);
+  const [convertedAmount, setConvertedAmount] = useState('');
 
   let options = [];
   if (
@@ -37,7 +37,8 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
         .get(url)
         .then((response) => {
           const rate = response.data.info.rate;
-          setConvertedAmount(amount * rate);
+          const converted = amount * rate;
+          setConvertedAmount(converted.toFixed(2));
         })
         .catch((error) => console.error('Error fetching exchange rate', error));
     }
@@ -69,13 +70,104 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
           />
         </div>
       )}
-      <div className="mt-5 flex gap-2">
+      {/* <div
+        className="mt-5 flex gap-2 items-center input-wrapper"
+        data-symbol={
+          selectedCountryDetails && selectedCountryDetails.currencies
+            ? selectedCountryDetails.currencies[
+                Object.keys(selectedCountryDetails.currencies)[0]
+              ].symbol
+            : ''
+        }
+      >
         <input
           type="number"
+          pattern="\d*"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value !== '' && !isNaN(value) && value >= 0) {
+              setAmount(value);
+            }
+          }}
+          className="flex-grow p-2 pl-5 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
         />
-        <input type="number" value={convertedAmount} readOnly />
+        <div className="flex items-center text-xl font-bold text-gray-700">
+          =
+        </div>
+
+        <input
+          type="number"
+          value={convertedAmount}
+          readOnly
+          placeholder={
+            selectedCurrency
+              ? countries.find(
+                  (country) =>
+                    country.currencies &&
+                    Object.keys(country.currencies)[0] === selectedCurrency
+                ).currencies[selectedCurrency].symbol
+              : selectedCountryDetails && selectedCountryDetails.currencies
+              ? selectedCountryDetails.currencies[
+                  Object.keys(selectedCountryDetails.currencies)[0]
+                ].symbol
+              : ''
+          }
+          className="flex-grow p-2 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-normal"
+        />
+      </div> */}
+      <div className="mt-5 flex gap-2 items-center">
+        <div
+          className="input-wrapper"
+          data-symbol={
+            selectedCountryDetails && selectedCountryDetails.currencies
+              ? selectedCountryDetails.currencies[
+                  Object.keys(selectedCountryDetails.currencies)[0]
+                ].symbol
+              : ''
+          }
+        >
+          <input
+            type="number"
+            pattern="\d*"
+            value={amount}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value !== '' && !isNaN(value) && value >= 0) {
+                setAmount(value);
+              }
+            }}
+            className="flex-grow p-2 pl-5 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+          />
+        </div>
+
+        <div className="flex items-center text-xl font-bold text-gray-700">
+          =
+        </div>
+
+        <div
+          className="input-wrapper"
+          data-symbol={
+            selectedCurrency
+              ? countries.find(
+                  (country) =>
+                    country.currencies &&
+                    Object.keys(country.currencies)[0] === selectedCurrency
+                ).currencies[selectedCurrency].symbol
+              : selectedCountryDetails && selectedCountryDetails.currencies
+              ? selectedCountryDetails.currencies[
+                  Object.keys(selectedCountryDetails.currencies)[0]
+                ].symbol
+              : ''
+          }
+        >
+          <input
+            type="number"
+            value={convertedAmount}
+            readOnly
+            className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-normal"
+          />
+        </div>
       </div>
     </div>
   );

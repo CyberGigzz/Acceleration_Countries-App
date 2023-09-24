@@ -88,7 +88,7 @@ const App = () => {
           countries={countries}
         />
       ) : (
-        <Airports  selectedCountryDetails={selectedCountryDetails}/>
+        <Airports selectedCountryDetails={selectedCountryDetails} />
       )}
     </div>
   );
