@@ -37,7 +37,6 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
         .get(url)
         .then((response) => {
           const rate = response.data.info.rate;
-          console.log(rate);
           setConvertedAmount(amount * rate);
         })
         .catch((error) => console.error('Error fetching exchange rate', error));

@@ -4,11 +4,12 @@ import CountrySelect from './components/CountrySelect';
 import CountryDetails from './components/CountryDetails';
 import InfoLinks from './components/InfoLinks';
 import CurrencyExchange from './components/CurrencyExchange';
+import Airports from './components/Airports';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
-
+  const [activeLink, setActiveLink] = useState('currency');
   const [userLocation, setUserLocation] = useState(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -59,10 +60,6 @@ const App = () => {
     (country) => country.cca2 === selectedCountry
   );
 
-  // const handleCountryChange = (event) => {
-  //   setSelectedCountry(event.target.value);
-  // };
-
   const options = countries.map((country) => ({
     value: country.cca2,
     label: country.name.common,
@@ -83,8 +80,16 @@ const App = () => {
         selectedCountryDetails={selectedCountryDetails}
         countries={countries}
       />
-      <InfoLinks />
-      <CurrencyExchange selectedCountryDetails={selectedCountryDetails} countries={countries} />
+      <InfoLinks activeLink={activeLink} setActiveLink={setActiveLink} />
+      {/* <CurrencyExchange selectedCountryDetails={selectedCountryDetails} countries={countries} /> */}
+      {activeLink === 'currency' ? (
+        <CurrencyExchange
+          selectedCountryDetails={selectedCountryDetails}
+          countries={countries}
+        />
+      ) : (
+        <Airports  selectedCountryDetails={selectedCountryDetails}/>
+      )}
     </div>
   );
 };

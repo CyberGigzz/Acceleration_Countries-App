@@ -1,9 +1,7 @@
 // InfoLinks.js
-import { useState } from 'react';
+// import { useState } from 'react';
 
-const InfoLinks = () => {
-  const [activeLink, setActiveLink] = useState('currency');
-
+const InfoLinks = ({ activeLink, setActiveLink }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-start my-4  border-gray-200">
       <a
