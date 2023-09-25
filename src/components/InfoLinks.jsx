@@ -1,7 +1,13 @@
 // InfoLinks.js
 // import { useState } from 'react';
 
-const InfoLinks = ({ activeLink, setActiveLink }) => {
+const InfoLinks = ({
+  activeLink,
+  setActiveLink,
+  userLocation,
+  setGeoError,
+  geoError,
+}) => {
   return (
     <div className="flex flex-col sm:flex-row justify-start my-4  border-gray-200">
       <a
@@ -27,7 +33,12 @@ const InfoLinks = ({ activeLink, setActiveLink }) => {
         }`}
         onClick={(e) => {
           e.preventDefault();
-          setActiveLink('airports');
+          if (!userLocation) {
+            setGeoError('Please enable geolocation to view airports.');
+          } else {
+            setGeoError(null);
+            setActiveLink('airports');
+          }
         }}
       >
         AIRPORTS

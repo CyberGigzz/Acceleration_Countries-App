@@ -13,6 +13,7 @@ const App = () => {
   const [activeLink, setActiveLink] = useState('currency');
   const [userLocation, setUserLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [geoError, setGeoError] = useState(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -86,8 +87,14 @@ const App = () => {
         countries={countries}
         isLoading={isLoading}
       />
-      <InfoLinks activeLink={activeLink} setActiveLink={setActiveLink} />
-      {/* <CurrencyExchange selectedCountryDetails={selectedCountryDetails} countries={countries} /> */}
+      <InfoLinks
+        activeLink={activeLink}
+        setActiveLink={setActiveLink}
+        geoError={geoError}
+        userLocation={userLocation}
+        setGeoError={setGeoError}
+      />
+      {/* {geoError && <div>{geoError}</div>} */}
       {activeLink === 'currency' ? (
         <CurrencyExchange
           selectedCountryDetails={selectedCountryDetails}
