@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
+import { getCache, setCache } from './apiCache';
 
 const LoadingSkeleton = () => {
   return (
@@ -40,19 +41,50 @@ const CurrencyExchange = ({ selectedCountryDetails, countries, isLoading }) => {
       .filter(Boolean);
   }
 
+  // useEffect(() => {
+  //   if (selectedCurrency && amount) {
+  //     const baseCurrency = Object.keys(selectedCountryDetails.currencies)[0];
+  //     const url = `https://api.exchangerate.host/convert?from=${baseCurrency}&to=${selectedCurrency}`;
+
+  //     axios
+  //       .get(url)
+  //       .then((response) => {
+  //         const rate = response.data.info.rate;
+  //         const converted = amount * rate;
+  //         setConvertedAmount(converted.toFixed(2));
+  //       })
+  //       .catch((error) => console.error('Error fetching exchange rate', error));
+  //   }
+  // }, [selectedCurrency, amount, selectedCountryDetails]);
+
   useEffect(() => {
     if (selectedCurrency && amount) {
-      const baseCurrency = Object.keys(selectedCountryDetails.currencies)[0];
-      const url = `https://api.exchangerate.host/convert?from=${baseCurrency}&to=${selectedCurrency}`;
+      const cachedData = getCache(
+        `${selectedCountryDetails.cca2}-${selectedCurrency}`
+      );
+      if (cachedData) {
+        const rate = cachedData;
+        const converted = amount * rate;
+        setConvertedAmount(converted.toFixed(2));
+      } else {
+        const baseCurrency = Object.keys(selectedCountryDetails.currencies)[0];
+        const url = `https://api.exchangerate.host/convert?from=${baseCurrency}&to=${selectedCurrency}`;
 
-      axios
-        .get(url)
-        .then((response) => {
-          const rate = response.data.info.rate;
-          const converted = amount * rate;
-          setConvertedAmount(converted.toFixed(2));
-        })
-        .catch((error) => console.error('Error fetching exchange rate', error));
+        axios
+          .get(url)
+          .then((response) => {
+            const rate = response.data.info.rate;
+            const converted = amount * rate;
+            setConvertedAmount(converted.toFixed(2));
+            setCache(
+              `${selectedCountryDetails.cca2}-${selectedCurrency}`,
+              rate
+            );
+          })
+          .catch((error) =>
+            console.error('Error fetching exchange rate', error)
+          );
+      }
     }
   }, [selectedCurrency, amount, selectedCountryDetails]);
 
