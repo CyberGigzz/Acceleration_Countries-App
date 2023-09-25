@@ -14,7 +14,7 @@ const LoadingSkeleton = () => {
   );
 };
 
-const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
+const CurrencyExchange = ({ selectedCountryDetails, countries, isLoading }) => {
   const [selectedCurrency, setSelectedCurrency] = useState('');
   const [amount, setAmount] = useState(0);
   const [convertedAmount, setConvertedAmount] = useState('');
@@ -60,86 +60,90 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
     setSelectedCurrency(selectedOption.value);
   };
 
-  if (!selectedCountryDetails) {
+  if (isLoading) {
     return <LoadingSkeleton />;
   }
 
   return (
     <div className="shadow-lg p-5">
-      <h2 className="text-3xl font-bold">Currency Exchange</h2>
-      {options.length > 0 && (
-        <div style={{ marginTop: '20px', width: '160px' }}>
-          <Select
-            value={options.find(
-              (option) => option && option.value === selectedCurrency
-            )}
-            onChange={handleChange}
-            options={options}
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                cursor: 'pointer',
-                fontSize: '16px',
-              }),
-            }}
-            menuPlacement="auto"
-          />
-        </div>
-      )}
+      {selectedCountryDetails && (
+        <>
+          <h2 className="text-3xl font-bold">Currency Exchange</h2>
+          {options.length > 0 && (
+            <div style={{ marginTop: '20px', width: '160px' }}>
+              <Select
+                value={options.find(
+                  (option) => option && option.value === selectedCurrency
+                )}
+                onChange={handleChange}
+                options={options}
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                  }),
+                }}
+                menuPlacement="auto"
+              />
+            </div>
+          )}
 
-      <div className="mt-5 flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-start">
-        <div
-          className="input-wrapper"
-          data-symbol={
-            selectedCountryDetails && selectedCountryDetails.currencies
-              ? selectedCountryDetails.currencies[
-                  Object.keys(selectedCountryDetails.currencies)[0]
-                ].symbol
-              : ''
-          }
-        >
-          <input
-            type="number"
-            pattern="\d*"
-            value={amount}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value !== '' && !isNaN(value) && value >= 0) {
-                setAmount(value);
+          <div className="mt-5 flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-start">
+            <div
+              className="input-wrapper"
+              data-symbol={
+                selectedCountryDetails && selectedCountryDetails.currencies
+                  ? selectedCountryDetails.currencies[
+                      Object.keys(selectedCountryDetails.currencies)[0]
+                    ].symbol
+                  : ''
               }
-            }}
-            className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-          />
-        </div>
+            >
+              <input
+                type="number"
+                pattern="\d*"
+                value={amount}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value !== '' && !isNaN(value) && value >= 0) {
+                    setAmount(value);
+                  }
+                }}
+                className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              />
+            </div>
 
-        <div className="hidden sm:flex items-center text-xl font-bold text-gray-700">
-          =
-        </div>
+            <div className="hidden sm:flex items-center text-xl font-bold text-gray-700">
+              =
+            </div>
 
-        <div
-          className="input-wrapper"
-          data-symbol={
-            selectedCurrency
-              ? countries.find(
-                  (country) =>
-                    country.currencies &&
-                    Object.keys(country.currencies)[0] === selectedCurrency
-                ).currencies[selectedCurrency].symbol
-              : selectedCountryDetails && selectedCountryDetails.currencies
-              ? selectedCountryDetails.currencies[
-                  Object.keys(selectedCountryDetails.currencies)[0]
-                ].symbol
-              : ''
-          }
-        >
-          <input
-            type="number"
-            value={convertedAmount}
-            readOnly
-            className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-normal"
-          />
-        </div>
-      </div>
+            <div
+              className="input-wrapper"
+              data-symbol={
+                selectedCurrency
+                  ? countries.find(
+                      (country) =>
+                        country.currencies &&
+                        Object.keys(country.currencies)[0] === selectedCurrency
+                    ).currencies[selectedCurrency].symbol
+                  : selectedCountryDetails && selectedCountryDetails.currencies
+                  ? selectedCountryDetails.currencies[
+                      Object.keys(selectedCountryDetails.currencies)[0]
+                    ].symbol
+                  : ''
+              }
+            >
+              <input
+                type="number"
+                value={convertedAmount}
+                readOnly
+                className="flex-grow p-2 pl-8 border-2 border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-normal"
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -25,7 +25,6 @@ const App = () => {
     });
   }, []);
 
-
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all')
@@ -54,11 +53,9 @@ const App = () => {
               setSelectedCountry(countryComponent.short_name);
             }
           }
-          setIsLoading(false); //
         })
         .catch((error) => {
           console.error('Error getting country', error);
-          setIsLoading(false); //
         });
     }
   }, [userLocation, apiKey]);
@@ -87,6 +84,7 @@ const App = () => {
       <CountryDetails
         selectedCountryDetails={selectedCountryDetails}
         countries={countries}
+        isLoading={isLoading}
       />
       <InfoLinks activeLink={activeLink} setActiveLink={setActiveLink} />
       {/* <CurrencyExchange selectedCountryDetails={selectedCountryDetails} countries={countries} /> */}
@@ -94,6 +92,7 @@ const App = () => {
         <CurrencyExchange
           selectedCountryDetails={selectedCountryDetails}
           countries={countries}
+          isLoading={isLoading}
         />
       ) : (
         <Airports selectedCountryDetails={selectedCountryDetails} />

@@ -1,7 +1,7 @@
 import getSymbolFromCurrency from 'currency-symbol-map';
 
-const CountryDetails = ({ selectedCountryDetails, countries }) => {
-  if (!selectedCountryDetails) {
+const CountryDetails = ({ selectedCountryDetails, countries, isLoading }) => {
+  if (isLoading) {
     return (
       <div className="mt-5 p-5 shadow-lg">
         <div className="skeleton-box"></div>
