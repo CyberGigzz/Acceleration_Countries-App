@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import CountrySelect from './components/CountrySelect';
 import CountryDetails from './components/CountryDetails';
@@ -13,7 +14,6 @@ const App = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
@@ -24,6 +24,7 @@ const App = () => {
       });
     });
   }, []);
+
 
   useEffect(() => {
     axios
@@ -53,9 +54,11 @@ const App = () => {
               setSelectedCountry(countryComponent.short_name);
             }
           }
+          setIsLoading(false); //
         })
         .catch((error) => {
           console.error('Error getting country', error);
+          setIsLoading(false); //
         });
     }
   }, [userLocation, apiKey]);

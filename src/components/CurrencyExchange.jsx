@@ -68,7 +68,7 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
     <div className="shadow-lg p-5">
       <h2 className="text-3xl font-bold">Currency Exchange</h2>
       {options.length > 0 && (
-        <div style={{ marginTop: '20px', width: '25%' }}>
+        <div style={{ marginTop: '20px', width: '160px' }}>
           <Select
             value={options.find(
               (option) => option && option.value === selectedCurrency
@@ -87,7 +87,7 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
         </div>
       )}
 
-      <div className="mt-5 flex gap-2 items-center">
+      <div className="mt-5 flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-start">
         <div
           className="input-wrapper"
           data-symbol={
@@ -112,7 +112,7 @@ const CurrencyExchange = ({ selectedCountryDetails, countries }) => {
           />
         </div>
 
-        <div className="flex items-center text-xl font-bold text-gray-700">
+        <div className="hidden sm:flex items-center text-xl font-bold text-gray-700">
           =
         </div>
 
