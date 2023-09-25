@@ -5,7 +5,6 @@ import {
   Routes,
   useNavigate,
   useParams,
-  Navigate,
 } from 'react-router-dom';
 import axios from 'axios';
 import CountrySelect from './components/CountrySelect';
@@ -14,7 +13,7 @@ import InfoLinks from './components/InfoLinks';
 import CurrencyExchange from './components/CurrencyExchange';
 import Airports from './components/Airports';
 
-const CountryRoutes = () => {
+const App = () => {
   const navigate = useNavigate();
   const { countryCode } = useParams();
 
@@ -51,9 +50,9 @@ const CountryRoutes = () => {
 
   useEffect(() => {
     if (!countryCode) {
-      navigate(`/${selectedCountry}`);
+      navigate('/defaultCountryCode');
     }
-  }, [countryCode, selectedCountry, navigate]);
+  }, [countryCode, navigate]);
 
   useEffect(() => {
     if (userLocation) {
@@ -68,7 +67,6 @@ const CountryRoutes = () => {
             );
             if (countryComponent) {
               setSelectedCountry(countryComponent.short_name);
-              navigate(`/${countryComponent.short_name}`);
             }
           }
         })
@@ -89,62 +87,52 @@ const CountryRoutes = () => {
 
   const handleChange = (selectedOption) => {
     setSelectedCountry(selectedOption.value);
-    if (selectedOption.value !== countryCode) {
-      navigate(`/${selectedOption.value}`);
-    }
+    navigate(`/${selectedOption.value}`);
   };
 
   return (
-    <div className="p-6 border-solid border-2 max-w-7xl  w-full m-4">
-      <CountrySelect
-        options={options}
-        selectedCountry={selectedCountry}
-        handleChange={handleChange}
-        isLoading={isLoading}
-      />
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate replace to={`/${selectedCountry}`} />}
+    <Router>
+      <div className="p-6 border-solid border-2 max-w-7xl  w-full m-4">
+        <CountrySelect
+          options={options}
+          selectedCountry={selectedCountry}
+          handleChange={handleChange}
+          isLoading={isLoading}
         />
-        <Route
-          path="/:countryCode"
-          element={
-            <>
-              <CountryDetails
-                selectedCountryDetails={selectedCountryDetails}
-                countries={countries}
-                isLoading={isLoading}
-              />
-              <InfoLinks
-                activeLink={activeLink}
-                setActiveLink={setActiveLink}
-                geoError={geoError}
-                userLocation={userLocation}
-                setGeoError={setGeoError}
-                selectedCountryDetails={selectedCountryDetails}
-              />
-              {activeLink === 'currency' ? (
-                <CurrencyExchange
+        <Routes>
+          <Route
+            path="/:countryCode"
+            element={
+              <>
+                <CountryDetails
                   selectedCountryDetails={selectedCountryDetails}
                   countries={countries}
                   isLoading={isLoading}
                 />
-              ) : (
-                <Airports selectedCountryDetails={selectedCountryDetails} />
-              )}
-            </>
-          }
-        />
-      </Routes>
-    </div>
+                <InfoLinks
+                  activeLink={activeLink}
+                  setActiveLink={setActiveLink}
+                  geoError={geoError}
+                  userLocation={userLocation}
+                  setGeoError={setGeoError}
+                  selectedCountryDetails={selectedCountryDetails}
+                />
+                {activeLink === 'currency' ? (
+                  <CurrencyExchange
+                    selectedCountryDetails={selectedCountryDetails}
+                    countries={countries}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  <Airports selectedCountryDetails={selectedCountryDetails} />
+                )}
+              </>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 };
-
-const App = () => (
-  <Router>
-    <CountryRoutes />
-  </Router>
-);
 
 export default App;
