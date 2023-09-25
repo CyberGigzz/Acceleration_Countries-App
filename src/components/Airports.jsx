@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getCache, setCache } from './apiCache';
 
 const LoadingSkeleton = () => {
   return (
@@ -21,28 +22,60 @@ const Airports = ({ selectedCountryDetails }) => {
 
   const apiKey = import.meta.env.VITE_AIRPORTS_API_KEY;
 
+  // useEffect(() => {
+  //   if (selectedCountryDetails.name) {
+  //     const url = `https://api.api-ninjas.com/v1/airports?country=${selectedCountryDetails.cca2}`;
+  //     axios
+  //       .get(url, {
+  //         headers: {
+  //           'X-Api-Key': apiKey,
+  //         },
+  //       })
+  //       .then((response) => {
+  //         setAirports(response.data);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error fetching airports', error);
+  //         if (error.response) {
+  //           console.log(error.response.data);
+  //           console.log(error.response.status);
+  //           console.log(error.response.headers);
+  //         }
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [selectedCountryDetails, apiKey]);
+
   useEffect(() => {
     if (selectedCountryDetails.name) {
-      const url = `https://api.api-ninjas.com/v1/airports?country=${selectedCountryDetails.cca2}`;
-      axios
-        .get(url, {
-          headers: {
-            'X-Api-Key': apiKey,
-          },
-        })
-        .then((response) => {
-          setAirports(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error fetching airports', error);
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-          setIsLoading(false);
-        });
+      const cachedData = getCache(selectedCountryDetails.cca2);
+      if (cachedData) {
+        setAirports(cachedData);
+        setIsLoading(false);
+      } else {
+        const url = `https://api.api-ninjas.com/v1/airports?country=${selectedCountryDetails.cca2}`;
+        axios
+          .get(url, {
+            headers: {
+              'X-Api-Key': apiKey,
+            },
+          })
+          .then((response) => {
+            setAirports(response.data);
+            setCache(selectedCountryDetails.cca2, response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error('Error fetching airports', error);
+            if (error.response) {
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            }
+            setIsLoading(false);
+          });
+      }
     }
   }, [selectedCountryDetails, apiKey]);
 

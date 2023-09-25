@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -78,9 +78,13 @@ const CountryRoutes = () => {
     }
   }, [userLocation, apiKey]);
 
-  const selectedCountryDetails = countries.find(
-    (country) => country.cca2 === selectedCountry
-  );
+  // const selectedCountryDetails = countries.find(
+  //   (country) => country.cca2 === selectedCountry
+  // );
+
+  const selectedCountryDetails = useMemo(() => {
+    return countries.find((country) => country.cca2 === selectedCountry);
+  }, [countries, selectedCountry]);
 
   const options = countries.map((country) => ({
     value: country.cca2,
