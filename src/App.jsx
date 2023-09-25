@@ -93,6 +93,8 @@ const App = () => {
         geoError={geoError}
         userLocation={userLocation}
         setGeoError={setGeoError}
+        selectedCountryDetails={selectedCountryDetails}
+
       />
       {/* {geoError && <div>{geoError}</div>} */}
       {activeLink === 'currency' ? (

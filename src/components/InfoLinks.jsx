@@ -4,9 +4,8 @@
 const InfoLinks = ({
   activeLink,
   setActiveLink,
-  userLocation,
   setGeoError,
-  geoError,
+  selectedCountryDetails,
 }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-start my-4  border-gray-200">
@@ -33,7 +32,7 @@ const InfoLinks = ({
         }`}
         onClick={(e) => {
           e.preventDefault();
-          if (!userLocation) {
+          if (!selectedCountryDetails) {
             setGeoError('Please enable geolocation to view airports.');
           } else {
             setGeoError(null);
