@@ -20,6 +20,10 @@ const CurrencyExchange = ({ selectedCountryDetails, countries, isLoading }) => {
   const [amount, setAmount] = useState(0);
   const [convertedAmount, setConvertedAmount] = useState('');
 
+  // console.log(selectedCurrency);
+  // console.log(amount);
+  // console.log(convertedAmount);
+
   let options = [];
   if (
     countries &&
@@ -68,18 +72,25 @@ const CurrencyExchange = ({ selectedCountryDetails, countries, isLoading }) => {
         setConvertedAmount(converted.toFixed(2));
       } else {
         const baseCurrency = Object.keys(selectedCountryDetails.currencies)[0];
-        const url = `https://api.exchangerate.host/convert?from=${baseCurrency}&to=${selectedCurrency}`;
+        const url = `http://api.exchangerate.host/convert?from=${baseCurrency}&to=${selectedCurrency}&access_key=6ff1f3c5f82f5920e8582f7212cfc6c3&amount=${amount}`;
 
         axios
           .get(url)
           .then((response) => {
-            const rate = response.data.info.rate;
-            const converted = amount * rate;
-            setConvertedAmount(converted.toFixed(2));
-            setCache(
-              `${selectedCountryDetails.cca2}-${selectedCurrency}`,
-              rate
-            );
+            if (response.data && response.data.success) {
+              const rate = response.data.info.quote;
+              const converted = amount * rate;
+              setConvertedAmount(converted.toFixed(2));
+              setCache(
+                `${selectedCountryDetails.cca2}-${selectedCurrency}`,
+                rate
+              );
+            } else {
+              console.error('Unexpected API response', response);
+              if (response.data && response.data.error) {
+                console.error('API Error details', response.data.error);
+              }
+            }
           })
           .catch((error) =>
             console.error('Error fetching exchange rate', error)
